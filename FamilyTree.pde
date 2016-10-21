@@ -19,12 +19,19 @@ color femaleBox = color (236, 172, 172);
 boolean ancestors =  false;
 boolean descendants = false;
 boolean generate = false;
+boolean overrideState = false;
 
 
 void setup () {
   cp5 = new ControlP5(this);
 
   size (600, 400);
+
+  family = cp5.addCheckBox("Family")
+    .setPosition (30, 80)
+    .setSize(20, 20)
+    .addItem ("Ancestors", 1)
+    .addItem ("Descendants", 2);
 
   race = cp5.addDropdownList("Race")
     .setPosition (30, 30)
@@ -37,9 +44,9 @@ void setup () {
     .setPosition (100, 30)
     .setBarHeight (20)
     .setWidth (50)
-    .addItem ("Random", 1)
-    .addItem ("Male", 2)
-    .addItem ("Female", 3)
+    .addItem ("Random", 0)
+    .addItem ("Male", 1)
+    .addItem ("Female", 2)
     .close();
 
   firstName = cp5.addTextfield("First Name")
@@ -64,12 +71,6 @@ void setup () {
     .setSize(20, 20)
     .addItem ("override death", 1);
 
-  family = cp5.addCheckBox("Family")
-    .setPosition (30, 80)
-    .setSize(20, 20)
-    .addItem ("Ancestors", 1)
-    .addItem ("Descendants", 2);
-
   cp5.addBang("Generate")
     .setPosition (160, 90)
     .setSize (50, 20);
@@ -82,7 +83,7 @@ void setup () {
 
 void controlEvent(ControlEvent theEvent) {
   if (theEvent.isFrom(override)) {
-    boolean overrideState = override.getState("override death");
+    overrideState = override.getState("override death");
     if (overrideState == true) {
       cp5.get(Textfield.class, "Date of Death").show();
     } else {
@@ -95,20 +96,30 @@ void Generate () {
   mainCharacter.setCharacterName(firstName.getText() + " " + lastName.getText());
   println("Name: " + mainCharacter.name);
 
-  if (sex.getValue() == 2) {
-    mainCharacter.setColour(maleBox);
+  if (overrideState == false) {
+
+
+    mainCharacter.setLifeSpan(DoB.getText(), str((int) random (100)));
   } else {
+    mainCharacter.setLifeSpan(DoB.getText(), DoD.getText());
+  }
+
+  float gender = sex.getValue();
+  if (gender == 1) {
+    mainCharacter.setColour(maleBox);
+  } 
+  if (gender == 2) {
     mainCharacter.setColour(femaleBox);
   }  
 
   ancestors = family.getState("Ancestors");
   descendants = family.getState("Descendants");
   if (ancestors == true && descendants == true) {
-    mainCharacter.setPosition(width/2 - 50, 160);
+    mainCharacter.setPosition(width/2 - 50, 140);
   } else if (ancestors == true) {
-    mainCharacter.setPosition(width - 30 - 100, 160);
+    mainCharacter.setPosition(width - 30 - 100, 140);
   } else if (descendants == true) {
-    mainCharacter.setPosition(30, 160);
+    mainCharacter.setPosition(30, 140);
   }
   generate = true;
 }
