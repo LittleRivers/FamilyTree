@@ -12,18 +12,18 @@ class characterBox {
   void  addBox() {
     noStroke();
     fill(boxColour);
-    rect (x, y, 100, 80);
+    rect (x, y, 100, 40);
     fill (0);
     text (name, x + 10, y + 10);
-    text (lifeSpan, x + 10, y + 20);
+    text (lifeSpan, x + 10, y + 30);
   }
 
   void setCharacterName (String theName) {
     name = theName;
   }
   
-  void setLifeSpan (String birth, String death) {
-    lifeSpan = birth + " - " + death;
+  void setLifeSpan (String birth, String death, int age) {
+    lifeSpan = birth + " - " + death + " (" + age + ") ";
   }
 
   void setColour (int theColour) { 

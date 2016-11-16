@@ -13,6 +13,7 @@ Table femaleNames;
 Table maleNames;
 Table lastNames;
 Table deathProbability;
+TableRow r;
 
 color maleBox = color (172, 172, 236);
 color femaleBox = color (236, 172, 172);
@@ -96,21 +97,43 @@ void Generate () {
   mainCharacter.setCharacterName(firstName.getText() + " " + lastName.getText());
   println("Name: " + mainCharacter.name);
 
-  if (overrideState == false) {
-
-
-    mainCharacter.setLifeSpan(DoB.getText(), str((int) random (100)));
-  } else {
-    mainCharacter.setLifeSpan(DoB.getText(), DoD.getText());
-  }
-
   float gender = sex.getValue();
   if (gender == 1) {
     mainCharacter.setColour(maleBox);
   } 
   if (gender == 2) {
     mainCharacter.setColour(femaleBox);
-  }  
+  } 
+
+  if (overrideState == false) {
+    int maleRow = deathProbability.getRowCount() - 1;
+    int femaleRow = deathProbability.getRowCount();
+    if (gender == 1) {
+      r = deathProbability.getRow(maleRow);
+    }
+    if (gender == 2) {
+      r= deathProbability.getRow(femaleRow);
+    }
+    boolean i = false;
+    while (i == false) {
+      float randomNumber = random (1);
+      int age = (int) random (r.getColumnCount());
+      println (age);
+      float prob = r.getFloat(age);
+      println (prob);
+      if (prob >= randomNumber) {
+        i = true;
+        int birth = Integer.parseInt(DoB.getText());
+        println(birth);
+        String death = str(birth + age);
+        println (death);
+        mainCharacter.setLifeSpan(DoB.getText(), death, age);
+      }
+    }
+  } else {
+    mainCharacter.setLifeSpan(DoB.getText(), DoD.getText(), Integer.parseInt(DoD.getText()) - Integer.parseInt(DoB.getText()));
+  }
+
 
   ancestors = family.getState("Ancestors");
   descendants = family.getState("Descendants");
