@@ -116,18 +116,21 @@ void Generate () {
     }
     boolean i = false;
     while (i == false) {
-      float randomNumber = random (1);
-      int age = (int) random (r.getColumnCount());
-      println (age);
-      float prob = r.getFloat(age);
-      println (prob);
-      if (prob >= randomNumber) {
-        i = true;
-        int birth = Integer.parseInt(DoB.getText());
-        println(birth);
-        String death = str(birth + age);
-        println (death);
-        mainCharacter.setLifeSpan(DoB.getText(), death, age);
+      float randomNumber = random (100000);
+      println ("random = " + randomNumber);
+      for (int age = 0; age < r.getColumnCount(); age++) {
+        println ("age = " + age);
+        float prob = r.getFloat(age);
+        println ("probability = " +prob);
+        if (prob >= randomNumber) {
+          i = true;
+          int birth = Integer.parseInt(DoB.getText());
+          println(birth);
+          String death = str(birth + age);
+          println (death);
+          mainCharacter.setLifeSpan(DoB.getText(), death, age);
+          break;
+        }
       }
     }
   } else {
